@@ -1,5 +1,6 @@
-package pl.appcoders.moxacontroller.mainactivity;
+package pl.appcoders.moxacontroller.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.settings.SettingsActivity;
 
 /**
  * Created by mkowalik on 25.02.18.
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void menuSettingsHandler() {
-
+        startActivity(new Intent(this, SettingsActivity.class));
     }
 
     private void setCustomActionBar() {

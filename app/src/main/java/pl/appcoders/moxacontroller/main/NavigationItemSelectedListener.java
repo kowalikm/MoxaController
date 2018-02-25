@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.mainactivity;
+package pl.appcoders.moxacontroller.main;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
