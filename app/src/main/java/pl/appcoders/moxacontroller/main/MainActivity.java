@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setNavigationItemSelectedListener() {
-        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(drawerLayout));
+        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(this, drawerLayout));
     }
 
     private void selectDeviceStatusOnStart(@Nullable Bundle savedInstanceState) {
