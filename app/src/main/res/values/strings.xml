@@ -3,4 +3,6 @@
     <string name="device_status">Device status</string>
     <string name="inputs">Inputs</string>
     <string name="relays">Relays</string>
+    <string name="navigation_drawer_open">Open navigation</string>
+    <string name="navigation_drawer_close">Close navigation</string>
 </resources>
