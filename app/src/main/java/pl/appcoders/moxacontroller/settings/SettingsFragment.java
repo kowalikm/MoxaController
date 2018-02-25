@@ -10,12 +10,11 @@ import pl.appcoders.moxacontroller.R;
  * Created by mkowalik on 25.02.18.
  */
 
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         addPreferencesFromResource(R.xml.preferences);
     }
 }
