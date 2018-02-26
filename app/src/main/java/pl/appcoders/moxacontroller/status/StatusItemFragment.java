@@ -10,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
 
-public class StatusItemFragment extends Fragment {
+public class StatusItemFragment extends Fragment implements OnRefreshActionListener {
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+    private RecyclerView recyclerView;
+
     public StatusItemFragment() {
     }
 
@@ -34,7 +37,7 @@ public class StatusItemFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new StatusItemRecyclerViewAdapter(context));
         }
@@ -50,5 +53,10 @@ public class StatusItemFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @Override
+    public void refresh() {
+        ((StatusItemRecyclerViewAdapter)recyclerView.getAdapter()).refreshStatus();
     }
 }

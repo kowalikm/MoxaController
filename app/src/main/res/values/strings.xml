@@ -14,4 +14,7 @@
     <string name="firmware_version">Firmware version</string>
     <string name="mac_address">MAC address</string>
     <string name="ip_address">IP address</string>
+    <string name="online_status">Online</string>
+    <string name="offline_status">Offline</string>
+    <string name="no_data">n/a</string>
 </resources>

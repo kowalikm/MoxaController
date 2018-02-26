@@ -4,7 +4,7 @@ package pl.appcoders.moxacontroller.status;
  * Created by mkowalik on 26.02.18.
  */
 
-public class StatusItem {
+class StatusItem {
     private String id;
 
     private String data;

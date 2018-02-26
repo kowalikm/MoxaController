@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -57,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void menuRefreshHandler() {
-
+        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if(fragment instanceof OnRefreshActionListener) {
+            ((OnRefreshActionListener) fragment).refresh();
+        }
     }
 
     private void menuSettingsHandler() {
