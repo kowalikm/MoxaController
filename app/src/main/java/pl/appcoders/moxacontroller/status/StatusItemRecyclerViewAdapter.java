@@ -1,6 +1,5 @@
 package pl.appcoders.moxacontroller.status;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +12,8 @@ public class StatusItemRecyclerViewAdapter extends RecyclerView.Adapter<StatusIt
 
     private final StatusContainer statusContainer;
 
-    public StatusItemRecyclerViewAdapter(Context context) {
-        statusContainer = new StatusContainer(context);
-
-        statusContainer.setModelName("ioLogik E1214");
-        statusContainer.setDeviceUptime("5d 12h 31m 17s");
-        statusContainer.setFirmwareVersion("17.43.221b");
-        statusContainer.setMacAddress("01:23:45:67:89:ab");
-        statusContainer.setIpAddress("192.168.10.113");
+    public StatusItemRecyclerViewAdapter(StatusContainer statusContainer) {
+        this.statusContainer = statusContainer;
     }
 
     @Override
@@ -40,10 +33,6 @@ public class StatusItemRecyclerViewAdapter extends RecyclerView.Adapter<StatusIt
     @Override
     public int getItemCount() {
         return statusContainer.getStatusItemList().size();
-    }
-
-    public void refreshStatus() {
-        statusContainer.setConnectionStatus(true);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -2,15 +2,21 @@ package pl.appcoders.moxacontroller.status;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class StatusItemFragment extends Fragment implements OnRefreshActionListener {
 
@@ -20,7 +26,12 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
      */
     private RecyclerView recyclerView;
 
+    private SystemInfoService systemInfoService;
+
+    private SystemInfoCallback systemInfoCallback;
+
     public StatusItemFragment() {
+
     }
 
     @Override
@@ -33,13 +44,18 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statusitem_list, container, false);
-
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new StatusItemRecyclerViewAdapter(context));
+            recyclerView.setAdapter(new StatusItemRecyclerViewAdapter(new StatusContainer(context)));
+
+            systemInfoCallback = new SystemInfoCallback(recyclerView, getActivity());
+
+            createSystemInfoService();
+
+            startRequest();
         }
         return view;
     }
@@ -56,7 +72,28 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
     }
 
     @Override
-    public void refresh() {
-        ((StatusItemRecyclerViewAdapter)recyclerView.getAdapter()).refreshStatus();
+    public void refreshAction() {
+        Toast.makeText(getActivity(), R.string.refresh_toast, Toast.LENGTH_LONG).show();
+        startRequest();
+    }
+
+    private void startRequest() {
+        systemInfoService.getSystemInfo().enqueue(systemInfoCallback);
+    }
+
+    private void createSystemInfoService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(getApiAddress())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        systemInfoService = retrofit.create(SystemInfoService.class);
+    }
+
+    @NonNull
+    private String getApiAddress() {
+        final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        String apiAddress = defaultSharedPreferences.getString("deviceAddress", new String());
+        String apiEndpoint = defaultSharedPreferences.getString("restfulApiEndpoint", "/api/slot/0/");
+        return apiAddress + apiEndpoint;
     }
 }

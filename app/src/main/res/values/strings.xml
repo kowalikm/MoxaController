@@ -17,4 +17,13 @@
     <string name="online_status">Online</string>
     <string name="offline_status">Offline</string>
     <string name="no_data">n/a</string>
+    <string name="restful_api_endpoint">RESTful API endpoint</string>
+    <string name="device_address_summary">Moxa ioLogik network address</string>
+    <string name="restful_setting_summary">RESTful API base endpoint</string>
+    <string name="device_name">Device name</string>
+    <string name="website">www.appcoders.pl</string>
+    <string name="wrong_address_exception_message"><![CDATA[Provided device address is not valid. Provide valid address in following format: http://<host>:<port>]]></string>
+    <string name="wrong_device_address_alert_title">Wrong device address</string>
+    <string name="device_status_refresh">Device status refreshed</string>
+    <string name="refresh_toast">Refreshing...</string>
 </resources>

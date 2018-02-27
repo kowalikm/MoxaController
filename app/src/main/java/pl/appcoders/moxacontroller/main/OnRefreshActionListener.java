@@ -5,5 +5,5 @@ package pl.appcoders.moxacontroller.main;
  */
 
 public interface OnRefreshActionListener {
-    public void refresh();
+    void refreshAction();
 }

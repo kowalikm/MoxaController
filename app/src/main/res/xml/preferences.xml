@@ -4,5 +4,13 @@
         android:key="deviceAddress"
         android:selectAllOnFocus="true"
         android:singleLine="true"
+        android:summary="@string/device_address_summary"
         android:title="@string/device_address" />
+    <EditTextPreference
+        android:defaultValue="/api/slot/0/"
+        android:key="restfulApiEndpoint"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="@string/restful_setting_summary"
+        android:title="@string/restful_api_endpoint" />
 </PreferenceScreen>

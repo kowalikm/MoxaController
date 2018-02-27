@@ -18,6 +18,8 @@ class StatusContainer {
 
     private String modelName;
 
+    private String deviceName;
+
     private String deviceUptime;
 
     private String firmwareVersion;
@@ -31,34 +33,22 @@ class StatusContainer {
         isConnected = false;
     }
 
-    public void setConnectionStatus(boolean isConnected) {
-        this.isConnected = isConnected;
-    }
-
-    public void setModelName(String modelName) {
-        this.modelName = modelName;
-    }
-
-    public void setDeviceUptime(String deviceUptime) {
-        this.deviceUptime = deviceUptime;
-    }
-
-    public void setFirmwareVersion(String firmwareVersion) {
-        this.firmwareVersion = firmwareVersion;
-    }
-
-    public void setMacAddress(String macAddress) {
-        this.macAddress = macAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public StatusContainer(SystemInfo systemInfo, Context context) {
+        this.context = context;
+        isConnected = true;
+        modelName = systemInfo.getDevice().getModelName();
+        deviceName = systemInfo.getDevice().getDeviceName();
+        deviceUptime = systemInfo.getDevice().getDeviceUpTime();
+        firmwareVersion = systemInfo.getDevice().getFirmwareVersion();
+        macAddress = systemInfo.getNetwork().getLanNetworkSystemInfo().getLanMac();
+        ipAddress = systemInfo.getNetwork().getLanNetworkSystemInfo().getLanIp();
     }
 
     public List<StatusItem> getStatusItemList() {
         List<StatusItem> list = new ArrayList<>();
         list.add(createMainStatusItem());
         list.add(createStatusItem(R.string.model_name, modelName));
+        list.add(createStatusItem(R.string.device_name, deviceName));
         list.add(createStatusItem(R.string.device_uptime, deviceUptime));
         list.add(createStatusItem(R.string.firmware_version, firmwareVersion));
         list.add(createStatusItem(R.string.mac_address, macAddress));
