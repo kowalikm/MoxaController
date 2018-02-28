@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.status;
+package pl.appcoders.moxacontroller.systeminfo;
 
 import android.content.Context;
 
@@ -6,12 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.systeminfo.dto.SystemInfo;
 
-/**
- * Created by mkowalik on 26.02.18.
- */
-
-class StatusContainer {
+class SystemInfoContainer {
     private final Context context;
 
     private boolean isConnected;
@@ -28,12 +25,12 @@ class StatusContainer {
 
     private String ipAddress;
 
-    public StatusContainer(Context context) {
+    SystemInfoContainer(Context context) {
         this.context = context;
         isConnected = false;
     }
 
-    public StatusContainer(SystemInfo systemInfo, Context context) {
+    SystemInfoContainer(SystemInfo systemInfo, Context context) {
         this.context = context;
         isConnected = true;
         modelName = systemInfo.getDevice().getModelName();
@@ -44,25 +41,25 @@ class StatusContainer {
         ipAddress = systemInfo.getNetwork().getLanNetworkSystemInfo().getLanIp();
     }
 
-    public List<StatusItem> getStatusItemList() {
-        List<StatusItem> list = new ArrayList<>();
-        list.add(createMainStatusItem());
-        list.add(createStatusItem(R.string.model_name, modelName));
-        list.add(createStatusItem(R.string.device_name, deviceName));
-        list.add(createStatusItem(R.string.device_uptime, deviceUptime));
-        list.add(createStatusItem(R.string.firmware_version, firmwareVersion));
-        list.add(createStatusItem(R.string.mac_address, macAddress));
-        list.add(createStatusItem(R.string.ip_address, ipAddress));
+    List<SystemInfoItem> getSystemInfoItemList() {
+        List<SystemInfoItem> list = new ArrayList<>();
+        list.add(createMainSystemInfoItem());
+        list.add(createSystemInfoItem(R.string.model_name, modelName));
+        list.add(createSystemInfoItem(R.string.device_name, deviceName));
+        list.add(createSystemInfoItem(R.string.device_uptime, deviceUptime));
+        list.add(createSystemInfoItem(R.string.firmware_version, firmwareVersion));
+        list.add(createSystemInfoItem(R.string.mac_address, macAddress));
+        list.add(createSystemInfoItem(R.string.ip_address, ipAddress));
         return list;
     }
 
-    private StatusItem createStatusItem(int id, String data) {
-        return new StatusItem(context.getString(id), isConnected ? data :
+    private SystemInfoItem createSystemInfoItem(int id, String data) {
+        return new SystemInfoItem(context.getString(id), isConnected ? data :
                 context.getString(R.string.no_data));
     }
 
-    private StatusItem createMainStatusItem() {
-        return new StatusItem(context.getString(R.string.connection_status),
+    private SystemInfoItem createMainSystemInfoItem() {
+        return new SystemInfoItem(context.getString(R.string.connection_status),
                 isConnected ? context.getString(R.string.online_status) :
                         context.getString(R.string.offline_status));
     }

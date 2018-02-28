@@ -1,15 +1,11 @@
-package pl.appcoders.moxacontroller.status;
+package pl.appcoders.moxacontroller.systeminfo;
 
-/**
- * Created by mkowalik on 26.02.18.
- */
-
-class StatusItem {
+class SystemInfoItem {
     private String id;
 
     private String data;
 
-    public StatusItem(String id, String data) {
+    SystemInfoItem(String id, String data) {
         this.id = id;
         this.data = data;
     }

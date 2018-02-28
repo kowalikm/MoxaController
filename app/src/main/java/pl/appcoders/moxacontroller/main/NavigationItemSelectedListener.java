@@ -8,18 +8,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
 import pl.appcoders.moxacontroller.R;
-import pl.appcoders.moxacontroller.status.StatusItemFragment;
+import pl.appcoders.moxacontroller.systeminfo.SystemInfoItemFragment;
 
-/**
- * Created by mkowalik on 25.02.18.
- */
-
-public class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
+class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
 
     private final Activity activity;
     private final DrawerLayout drawerLayout;
 
-    public NavigationItemSelectedListener(Activity activity, DrawerLayout drawerLayout) {
+    NavigationItemSelectedListener(Activity activity, DrawerLayout drawerLayout) {
         this.activity = activity;
         this.drawerLayout = drawerLayout;
     }
@@ -30,14 +26,14 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
 
         drawerLayout.closeDrawers();
 
-        Fragment fragment = null;
+        Fragment fragment;
 
         switch (item.getItemId()) {
             case R.id.nav_device_status:
-                fragment = new StatusItemFragment();
+                fragment = new SystemInfoItemFragment();
                 break;
             default:
-                fragment = new StatusItemFragment();
+                fragment = new SystemInfoItemFragment();
                 break;
         }
 

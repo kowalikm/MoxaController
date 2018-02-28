@@ -1,13 +1,9 @@
-package pl.appcoders.moxacontroller.status;
+package pl.appcoders.moxacontroller.systeminfo.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by mkowalik on 26.02.18.
- */
-
-class DeviceSystemInfo {
+public class DeviceSystemInfo {
     @SerializedName("modelName")
     @Expose
     private String modelName;

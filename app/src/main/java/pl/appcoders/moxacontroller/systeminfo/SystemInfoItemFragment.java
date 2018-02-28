@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.status;
+package pl.appcoders.moxacontroller.systeminfo;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -15,10 +15,11 @@ import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
+import pl.appcoders.moxacontroller.systeminfo.service.SystemInfoService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class StatusItemFragment extends Fragment implements OnRefreshActionListener {
+public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -30,7 +31,7 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
 
     private SystemInfoCallback systemInfoCallback;
 
-    public StatusItemFragment() {
+    public SystemInfoItemFragment() {
 
     }
 
@@ -49,7 +50,7 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new StatusItemRecyclerViewAdapter(new StatusContainer(context)));
+            recyclerView.setAdapter(new SystemInfoItemRecyclerViewAdapter(new SystemInfoContainer(context)));
 
             systemInfoCallback = new SystemInfoCallback(recyclerView, getActivity());
 
@@ -92,7 +93,7 @@ public class StatusItemFragment extends Fragment implements OnRefreshActionListe
     @NonNull
     private String getApiAddress() {
         final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        String apiAddress = defaultSharedPreferences.getString("deviceAddress", new String());
+        String apiAddress = defaultSharedPreferences.getString("deviceAddress", "");
         String apiEndpoint = defaultSharedPreferences.getString("restfulApiEndpoint", "/api/slot/0/");
         return apiAddress + apiEndpoint;
     }
