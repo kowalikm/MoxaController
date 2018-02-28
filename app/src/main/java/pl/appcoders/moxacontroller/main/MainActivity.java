@@ -13,13 +13,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
+import pl.appcoders.moxacontroller.inputs.MappedInputItem;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
 
 /**
  * Created by mkowalik on 25.02.18.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MappedInputFragment.OnListFragmentInteractionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -89,5 +92,10 @@ public class MainActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             navigationView.getMenu().performIdentifierAction(R.id.nav_device_status, 0);
         }
+    }
+
+    @Override
+    public void onListFragmentInteraction(MappedInputItem item) {
+
     }
 }

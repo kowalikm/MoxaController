@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.systeminfo.SystemInfoItemFragment;
 
 class NavigationItemSelectedListener implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,13 +27,16 @@ class NavigationItemSelectedListener implements NavigationView.OnNavigationItemS
 
         drawerLayout.closeDrawers();
 
-        Fragment fragment;
+        Fragment fragment = null;
 
         switch (item.getItemId()) {
             case R.id.nav_device_status:
                 fragment = new SystemInfoItemFragment();
                 break;
-            default:
+            case R.id.nav_inputs:
+                fragment = new MappedInputFragment();
+                break;
+            case R.id.nav_relays:
                 fragment = new SystemInfoItemFragment();
                 break;
         }

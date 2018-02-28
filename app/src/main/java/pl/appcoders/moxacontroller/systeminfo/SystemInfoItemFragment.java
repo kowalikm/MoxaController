@@ -20,20 +20,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     private RecyclerView recyclerView;
 
     private SystemInfoService systemInfoService;
 
     private SystemInfoCallback systemInfoCallback;
-
-    public SystemInfoItemFragment() {
-
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
