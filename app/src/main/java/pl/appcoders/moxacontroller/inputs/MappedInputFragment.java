@@ -21,7 +21,6 @@ public class MappedInputFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Mapped inputs");
-
     }
 
     @Override
@@ -29,13 +28,13 @@ public class MappedInputFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mappedinput_list, container, false);
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(new ArrayList<MappedInputItem>(), listener));
         }
+
         return view;
     }
 

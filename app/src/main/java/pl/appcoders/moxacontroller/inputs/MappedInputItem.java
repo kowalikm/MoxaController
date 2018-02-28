@@ -5,12 +5,18 @@ package pl.appcoders.moxacontroller.inputs;
  */
 
 public class MappedInputItem {
-    private String mappedName;
-    private int counterValue;
+    private final long id;
+    private final String mappedName;
+    private final int counterValue;
 
-    public MappedInputItem(String mappedName, int counterValue) {
+    public MappedInputItem(long id, String mappedName, int counterValue) {
+        this.id = id;
         this.mappedName = mappedName;
         this.counterValue = counterValue;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getMappedName() {
