@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
 
-public class MappedInputFragment extends Fragment {
+public class MappedInputFragment extends Fragment implements OnRefreshActionListener {
 
     private OnListFragmentInteractionListener listener;
+    private MappedInputController mappedInputController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,12 +28,16 @@ public class MappedInputFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mappedinput_list, container, false);
 
+        mappedInputController = new MappedInputController(view.getContext());
+
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(new ArrayList<MappedInputItem>(), listener));
+            recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(mappedInputController.getMappedInputItems(), listener));
         }
+
+        mappedInputController.refreshMappedInputs();
 
         return view;
     }
@@ -54,6 +58,11 @@ public class MappedInputFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         listener = null;
+    }
+
+    @Override
+    public void refreshAction() {
+
     }
 
     public interface OnListFragmentInteractionListener {
