@@ -2,10 +2,7 @@ package pl.appcoders.moxacontroller.systeminfo;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,9 +12,8 @@ import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
+import pl.appcoders.moxacontroller.restclient.RestClient;
 import pl.appcoders.moxacontroller.systeminfo.service.SystemInfoService;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
     private RecyclerView recyclerView;
@@ -74,18 +70,6 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
     }
 
     private void createSystemInfoService() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getApiAddress())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        systemInfoService = retrofit.create(SystemInfoService.class);
-    }
-
-    @NonNull
-    private String getApiAddress() {
-        final SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        String apiAddress = defaultSharedPreferences.getString("deviceAddress", "");
-        String apiEndpoint = defaultSharedPreferences.getString("restfulApiEndpoint", "/api/slot/0/");
-        return apiAddress + apiEndpoint;
+        systemInfoService = RestClient.getRetrofitInstance(this.getActivity()).create(SystemInfoService.class);
     }
 }
