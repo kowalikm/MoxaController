@@ -17,10 +17,6 @@ import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.inputs.MappedInputItem;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
 
-/**
- * Created by mkowalik on 25.02.18.
- */
-
 public class MainActivity extends AppCompatActivity
         implements MappedInputFragment.OnListFragmentInteractionListener {
 

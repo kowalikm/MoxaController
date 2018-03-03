@@ -10,10 +10,6 @@ import retrofit2.http.Headers;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
-/**
- * Created by mkowalik on 28.02.18.
- */
-
 public interface DigitalInputService {
 
     @Headers({"Accept: vdn.dac.v1", "Content-Type: application/json"})
