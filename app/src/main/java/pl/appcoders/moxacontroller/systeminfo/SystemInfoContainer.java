@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.systeminfo.dto.Device;
 import pl.appcoders.moxacontroller.systeminfo.dto.SystemInfo;
 
 class SystemInfoContainer {
@@ -33,12 +34,13 @@ class SystemInfoContainer {
     SystemInfoContainer(SystemInfo systemInfo, Context context) {
         this.context = context;
         isConnected = true;
-        modelName = systemInfo.getDevice().getModelName();
-        deviceName = systemInfo.getDevice().getDeviceName();
-        deviceUptime = systemInfo.getDevice().getDeviceUpTime();
-        firmwareVersion = systemInfo.getDevice().getFirmwareVersion();
-        macAddress = systemInfo.getNetwork().getLanNetworkSystemInfo().getLanMac();
-        ipAddress = systemInfo.getNetwork().getLanNetworkSystemInfo().getLanIp();
+        Device device = systemInfo.getSysInfo().getDevice().get(0);
+        modelName = device.getModelName();
+        deviceName = device.getDeviceName();
+        deviceUptime = device.getDeviceUpTime();
+        firmwareVersion = device.getFirmwareVersion();
+        macAddress = systemInfo.getSysInfo().getNetwork().getLAN().getLanMac();
+        ipAddress = systemInfo.getSysInfo().getNetwork().getLAN().getLanIp();
     }
 
     List<SystemInfoItem> getSystemInfoItemList() {

@@ -8,6 +8,6 @@ import retrofit2.http.Headers;
 public interface SystemInfoService {
 
     @Headers({"Accept: vdn.dac.v1", "Content-Type: application/json"})
-    @GET("sysinfo")
+    @GET("sysInfo")
     Call<SystemInfo> getSystemInfo();
 }

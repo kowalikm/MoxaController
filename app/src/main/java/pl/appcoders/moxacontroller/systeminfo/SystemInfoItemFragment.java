@@ -70,6 +70,6 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
     }
 
     private void createSystemInfoService() {
-        systemInfoService = RestClient.getRetrofitInstance(this.getActivity()).create(SystemInfoService.class);
+        systemInfoService = RestClient.getRetrofitInstance(getActivity()).create(SystemInfoService.class);
     }
 }

@@ -1,30 +1,32 @@
+
 package pl.appcoders.moxacontroller.systeminfo.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class SystemInfo {
-    @SerializedName("device")
+
+    @SerializedName("slot")
     @Expose
-    private DeviceSystemInfo device;
-
-    @SerializedName("network")
+    private Integer slot;
+    @SerializedName("sysInfo")
     @Expose
-    private NetworkSystemInfo network;
+    private SysInfo sysInfo;
 
-    public DeviceSystemInfo getDevice() {
-        return device;
+    public Integer getSlot() {
+        return slot;
     }
 
-    public void setDevice(DeviceSystemInfo device) {
-        this.device = device;
+    public void setSlot(Integer slot) {
+        this.slot = slot;
     }
 
-    public NetworkSystemInfo getNetwork() {
-        return network;
+    public SysInfo getSysInfo() {
+        return sysInfo;
     }
 
-    public void setNetwork(NetworkSystemInfo network) {
-        this.network = network;
+    public void setSysInfo(SysInfo sysInfo) {
+        this.sysInfo = sysInfo;
     }
+
 }

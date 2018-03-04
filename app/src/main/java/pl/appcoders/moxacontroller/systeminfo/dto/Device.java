@@ -1,21 +1,20 @@
+
 package pl.appcoders.moxacontroller.systeminfo.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class DeviceSystemInfo {
+public class Device {
+
     @SerializedName("modelName")
     @Expose
     private String modelName;
-
     @SerializedName("deviceName")
     @Expose
     private String deviceName;
-
     @SerializedName("deviceUpTime")
     @Expose
     private String deviceUpTime;
-
     @SerializedName("firmwareVersion")
     @Expose
     private String firmwareVersion;
@@ -51,4 +50,5 @@ public class DeviceSystemInfo {
     public void setFirmwareVersion(String firmwareVersion) {
         this.firmwareVersion = firmwareVersion;
     }
+
 }

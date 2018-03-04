@@ -17,8 +17,9 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static AppDatabase getInstance(Context context) {
         if(instance == null) {
+            //Use async methods for query handling if ui gets locked
             instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,
-                    "moxa-controller-db").build();
+                    "moxa-controller-db").allowMainThreadQueries().build();
         }
 
         return instance;

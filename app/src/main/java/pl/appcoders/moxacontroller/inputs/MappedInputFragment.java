@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +32,9 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
         mappedInputController = new MappedInputController(view.getContext());
 
         if (view instanceof RecyclerView) {
+            Log.i("Recycler view maping", "Mapping adapter");
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.list);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(mappedInputController.getMappedInputItems(), listener));
         }

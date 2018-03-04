@@ -1,13 +1,14 @@
+
 package pl.appcoders.moxacontroller.systeminfo.dto;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class LanNetworkSystemInfo {
+public class LAN {
+
     @SerializedName("lanMac")
     @Expose
     private String lanMac;
-
     @SerializedName("lanIp")
     @Expose
     private String lanIp;
@@ -27,4 +28,5 @@ public class LanNetworkSystemInfo {
     public void setLanIp(String lanIp) {
         this.lanIp = lanIp;
     }
+
 }
