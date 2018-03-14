@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
+import pl.appcoders.moxacontroller.systeminfo.dto.Device;
+import pl.appcoders.moxacontroller.systeminfo.dto.LAN;
 import pl.appcoders.moxacontroller.systeminfo.dto.SystemInfo;
 
 public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
@@ -28,17 +30,17 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
         systemInfoViewModel.getIsConnected().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String isConnected) {
-                TextView textView = getActivity().findViewById(R.id.isConnectedText);
-                textView.setText(isConnected);
+                setTextViewText(R.id.isConnectedValue, isConnected);
             }
         });
         systemInfoViewModel.getSystemInfo().observe(this, new Observer<SystemInfo>() {
             @Override
             public void onChanged(@Nullable SystemInfo systemInfo) {
-                TextView textView = getActivity().findViewById(R.id.modelNameText);
-                textView.setText(systemInfo.getSysInfo().getDevice().get(0).getModelName());
+                updateDeviceInfo(systemInfo);
+                updateNetworkInfo(systemInfo);
             }
         });
+
     }
 
     @Override
@@ -62,5 +64,24 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
     @Override
     public void refreshAction() {
         systemInfoViewModel.refresh();
+    }
+
+    private void setTextViewText(int id, String text) {
+        TextView textView = getActivity().findViewById(id);
+        textView.setText(text);
+    }
+
+    private void updateNetworkInfo(@Nullable SystemInfo systemInfo) {
+        LAN lan = systemInfo.getSysInfo().getNetwork().getLAN();
+        setTextViewText(R.id.lanMacValue, lan.getLanMac());
+        setTextViewText(R.id.lanIpValue, lan.getLanIp());
+    }
+
+    private void updateDeviceInfo(@Nullable SystemInfo systemInfo) {
+        Device device = systemInfo.getSysInfo().getDevice().get(0);
+        setTextViewText(R.id.modelNameValue, device.getModelName());
+        setTextViewText(R.id.deviceNameValue, device.getDeviceName());
+        setTextViewText(R.id.deviceUpTimeValue, device.getDeviceUpTime());
+        setTextViewText(R.id.firmwareVersionValue, device.getFirmwareVersion());
     }
 }
