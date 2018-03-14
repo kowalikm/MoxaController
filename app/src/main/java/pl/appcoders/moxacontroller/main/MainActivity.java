@@ -1,14 +1,17 @@
 package pl.appcoders.moxacontroller.main;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +19,7 @@ import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.inputs.MappedInputItem;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
+import pl.appcoders.moxacontroller.systeminfo.SystemInfoItemFragment;
 
 public class MainActivity extends AppCompatActivity
         implements MappedInputFragment.OnListFragmentInteractionListener {
@@ -57,9 +61,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void menuRefreshHandler() {
-        final Fragment fragment = getFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         if(fragment instanceof OnRefreshActionListener) {
-            ((OnRefreshActionListener) fragment).refreshAction();
+            ((OnRefreshActionListener)fragment).refreshAction();
+            Log.i("MenuRefreshHandler", "Refresh fragment.");
         }
     }
 
@@ -81,7 +86,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setNavigationItemSelectedListener() {
-        navigationView.setNavigationItemSelectedListener(new NavigationItemSelectedListener(this, drawerLayout));
+        navigationView.setNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                item.setChecked(true);
+                drawerLayout.closeDrawers();
+                Fragment fragment = null;
+                switch (item.getItemId()) {
+                    case R.id.nav_device_status:
+                        fragment = new SystemInfoItemFragment();
+                        break;
+                    case R.id.nav_inputs:
+//                fragment = new MappedInputFragment();
+                        break;
+                    case R.id.nav_relays:
+                        fragment = new SystemInfoItemFragment();
+                        break;
+                }
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.content_frame, fragment).commit();
+                return true;
+            }
+        });
     }
 
     private void selectDeviceStatusOnStart(@Nullable Bundle savedInstanceState) {

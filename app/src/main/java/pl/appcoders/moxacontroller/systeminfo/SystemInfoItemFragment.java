@@ -1,50 +1,50 @@
 package pl.appcoders.moxacontroller.systeminfo;
 
-import android.app.Fragment;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
-import pl.appcoders.moxacontroller.restclient.RestClient;
-import pl.appcoders.moxacontroller.systeminfo.service.SystemInfoService;
+import pl.appcoders.moxacontroller.systeminfo.dto.SystemInfo;
 
 public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
-    private RecyclerView recyclerView;
 
-    private SystemInfoService systemInfoService;
-
-    private SystemInfoCallback systemInfoCallback;
+    private SystemInfoViewModel systemInfoViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.device_status);
+        systemInfoViewModel = ViewModelProviders.of(this)
+                .get(SystemInfoViewModel.class);
+        systemInfoViewModel.getIsConnected().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String isConnected) {
+                TextView textView = getActivity().findViewById(R.id.isConnectedText);
+                textView.setText(isConnected);
+            }
+        });
+        systemInfoViewModel.getSystemInfo().observe(this, new Observer<SystemInfo>() {
+            @Override
+            public void onChanged(@Nullable SystemInfo systemInfo) {
+                TextView textView = getActivity().findViewById(R.id.modelNameText);
+                textView.setText(systemInfo.getSysInfo().getDevice().get(0).getModelName());
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_statusitem_list, container, false);
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new SystemInfoItemRecyclerViewAdapter(new SystemInfoContainer(context)));
-
-            systemInfoCallback = new SystemInfoCallback(recyclerView, getActivity());
-
-            createSystemInfoService();
-
-            startRequest();
-        }
+        View view = inflater.inflate(R.layout.fragment_statusitem, container, false);
         return view;
     }
 
@@ -61,15 +61,6 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
 
     @Override
     public void refreshAction() {
-        Toast.makeText(getActivity(), R.string.refresh_toast, Toast.LENGTH_LONG).show();
-        startRequest();
-    }
-
-    private void startRequest() {
-        systemInfoService.getSystemInfo().enqueue(systemInfoCallback);
-    }
-
-    private void createSystemInfoService() {
-        systemInfoService = RestClient.getRetrofitInstance(getActivity()).create(SystemInfoService.class);
+        systemInfoViewModel.refresh();
     }
 }
