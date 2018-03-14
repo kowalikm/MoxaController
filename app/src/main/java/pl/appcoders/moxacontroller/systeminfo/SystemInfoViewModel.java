@@ -33,6 +33,7 @@ public class SystemInfoViewModel extends ViewModel {
 
     public SystemInfoViewModel() {
         App.getInstance().getApplicationComponent().inject(this);
+        refresh();
     }
 
     LiveData<SystemInfo> getSystemInfo() {
@@ -52,7 +53,6 @@ public class SystemInfoViewModel extends ViewModel {
     }
 
     void refresh() {
-        Log.i("Refresh", "Refreshing viewmodel");
         systemInfoService.getSystemInfo().enqueue(new Callback<SystemInfo>() {
             @Override
             public void onResponse(Call<SystemInfo> call, Response<SystemInfo> response) {
@@ -61,7 +61,7 @@ public class SystemInfoViewModel extends ViewModel {
                     isConnectedMutableLiveData.postValue("Online");
                 } else {
                     setDefaultValues();
-                    Log.i("GetSystemInfoResponse", response.message());
+                    Log.w("GetSystemInfoResponse", response.message());
                     //Handle
                 }
             }
@@ -69,7 +69,7 @@ public class SystemInfoViewModel extends ViewModel {
             @Override
             public void onFailure(Call<SystemInfo> call, Throwable t) {
                 setDefaultValues();
-                Log.i("GetSystemInfoFailure", t.getMessage());
+                Log.w("GetSystemInfoFailure", t.getMessage());
                 //Handle
             }
         });
