@@ -10,6 +10,7 @@ import java.util.Arrays;
 import javax.inject.Inject;
 
 import pl.appcoders.moxacontroller.App;
+import pl.appcoders.moxacontroller.main.OnRestActionListener;
 import pl.appcoders.moxacontroller.systeminfo.dto.Device;
 import pl.appcoders.moxacontroller.systeminfo.dto.LAN;
 import pl.appcoders.moxacontroller.systeminfo.dto.Network;
@@ -20,13 +21,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by mkowalik on 04.03.18.
- */
-
 public class SystemInfoViewModel extends ViewModel {
     private MutableLiveData<String> isConnectedMutableLiveData;
     private MutableLiveData<SystemInfo> systemInfoMutableLiveData;
+    private OnRestActionListener onRestActionListener;
 
     @Inject
     SystemInfoService systemInfoService;
@@ -34,6 +32,17 @@ public class SystemInfoViewModel extends ViewModel {
     public SystemInfoViewModel() {
         App.getInstance().getApplicationComponent().inject(this);
         refresh();
+    }
+
+
+    public void registerOnRestActionListener(OnRestActionListener onRestActionListener) {
+        this.onRestActionListener = onRestActionListener;
+        Log.i("Register", "Registered");
+    }
+
+    public void unregisterOnRestActionListener() {
+        this.onRestActionListener = null;
+        Log.i("Register", "unRegistered");
     }
 
     LiveData<SystemInfo> getSystemInfo() {
@@ -53,6 +62,11 @@ public class SystemInfoViewModel extends ViewModel {
     }
 
     void refresh() {
+        if(isOnRestActionListenerRegistered()) {
+            onRestActionListener.requestStartedAction();
+            Log.i("requested", "action");
+        }
+
         systemInfoService.getSystemInfo().enqueue(new Callback<SystemInfo>() {
             @Override
             public void onResponse(Call<SystemInfo> call, Response<SystemInfo> response) {
@@ -62,7 +76,10 @@ public class SystemInfoViewModel extends ViewModel {
                 } else {
                     setDefaultValues();
                     Log.w("GetSystemInfoResponse", response.message());
-                    //Handle
+                }
+
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.responseAction(response);
                 }
             }
 
@@ -70,7 +87,9 @@ public class SystemInfoViewModel extends ViewModel {
             public void onFailure(Call<SystemInfo> call, Throwable t) {
                 setDefaultValues();
                 Log.w("GetSystemInfoFailure", t.getMessage());
-                //Handle
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.failureAction(t);
+                }
             }
         });
     }
@@ -114,5 +133,9 @@ public class SystemInfoViewModel extends ViewModel {
         lan.setLanMac("n/a");
         network.setLAN(lan);
         return network;
+    }
+
+    private boolean isOnRestActionListenerRegistered() {
+        return this.onRestActionListener != null;
     }
 }

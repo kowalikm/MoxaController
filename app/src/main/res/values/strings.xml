@@ -28,4 +28,5 @@
     <string name="refresh_toast">Refreshing…</string>
     <string name="error">Error</string>
     <string name="map_input">Map input</string>
+    <string name="refreshingMessage">Refreshing...</string>
 </resources>
