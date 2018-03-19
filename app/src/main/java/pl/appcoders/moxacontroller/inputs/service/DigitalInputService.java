@@ -1,23 +1,18 @@
 package pl.appcoders.moxacontroller.inputs.service;
 
-import pl.appcoders.moxacontroller.inputs.dto.Di;
-import pl.appcoders.moxacontroller.inputs.dto.DigitalInputList;
-import pl.appcoders.moxacontroller.inputs.dto.ErrorDto;
+import pl.appcoders.moxacontroller.inputs.dto.DigitalInputs;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
 
 public interface DigitalInputService {
 
     @Headers({"Accept: vdn.dac.v1", "Content-Type: application/json"})
     @GET("io/di")
-    Call<DigitalInputList> getDiList();
+    Call<DigitalInputs> getDigitalInputs();
 
 
-    @Headers({"Accept: vdn.dac.v1", "Content-Type: application/json"})
-    @PUT("io/di/{id}")
-    Call<ErrorDto> updateDi(@Path("id") String id, @Body Di di);
+//    @Headers({"Accept: vdn.dac.v1", "Content-Type: application/json"})
+//    @PUT("io/di/{id}")
+//    Call<ErrorDto> updateDi(@Path("id") String id, @Body Di di);
 }

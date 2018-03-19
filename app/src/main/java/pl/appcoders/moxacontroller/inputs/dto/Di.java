@@ -1,4 +1,3 @@
-
 package pl.appcoders.moxacontroller.inputs.dto;
 
 import com.google.gson.annotations.Expose;
@@ -12,12 +11,12 @@ public class Di {
     @SerializedName("diMode")
     @Expose
     private Integer diMode;
-    @SerializedName("diStatus")
-    @Expose
-    private Integer diStatus;
     @SerializedName("diCounterValue")
     @Expose
     private Integer diCounterValue;
+    @SerializedName("diCounterStatus")
+    @Expose
+    private Integer diCounterStatus;
     @SerializedName("diCounterReset")
     @Expose
     private Integer diCounterReset;
@@ -27,9 +26,9 @@ public class Di {
     @SerializedName("diCounterOverflowClear")
     @Expose
     private Integer diCounterOverflowClear;
-    @SerializedName("diCounterStatus")
+    @SerializedName("diStatus")
     @Expose
-    private Integer diCounterStatus;
+    private Integer diStatus;
 
     public Integer getDiIndex() {
         return diIndex;
@@ -47,20 +46,20 @@ public class Di {
         this.diMode = diMode;
     }
 
-    public Integer getDiStatus() {
-        return diStatus;
-    }
-
-    public void setDiStatus(Integer diStatus) {
-        this.diStatus = diStatus;
-    }
-
     public Integer getDiCounterValue() {
         return diCounterValue;
     }
 
     public void setDiCounterValue(Integer diCounterValue) {
         this.diCounterValue = diCounterValue;
+    }
+
+    public Integer getDiCounterStatus() {
+        return diCounterStatus;
+    }
+
+    public void setDiCounterStatus(Integer diCounterStatus) {
+        this.diCounterStatus = diCounterStatus;
     }
 
     public Integer getDiCounterReset() {
@@ -86,4 +85,13 @@ public class Di {
     public void setDiCounterOverflowClear(Integer diCounterOverflowClear) {
         this.diCounterOverflowClear = diCounterOverflowClear;
     }
+
+    public Integer getDiStatus() {
+        return diStatus;
+    }
+
+    public void setDiStatus(Integer diStatus) {
+        this.diStatus = diStatus;
+    }
+
 }

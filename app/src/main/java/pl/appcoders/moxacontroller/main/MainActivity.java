@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
                         fragment = new SystemInfoItemFragment();
                         break;
                     case R.id.nav_inputs:
-//                fragment = new MappedInputFragment();
+                        fragment = new MappedInputFragment();
                         break;
                     case R.id.nav_relays:
                         fragment = new SystemInfoItemFragment();
