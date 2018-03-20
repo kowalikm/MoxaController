@@ -7,18 +7,28 @@ public class MappedInputItem {
     private String mappedName;
     private int counterValue;
     private int apiIndex;
-    private boolean isLoaded;
+    private DigitalInputMode mode;
+    private DigitalInputStatus status;
+
+    public enum DigitalInputMode {
+        INPUT_MODE,
+        COUNTER_MODE
+    }
+
+    public enum DigitalInputStatus {
+        OFF_STATUS,
+        ON_STATUS
+    }
 
     public MappedInputItem(long id, String mappedName) {
         this.id = id;
         this.mappedName = mappedName;
-        isLoaded = false;
     }
 
     public MappedInputItem(MappedInput mappedInput) {
-        this.id = mappedInput.getId();
-        this.mappedName = mappedInput.getMappedName();
-        this.apiIndex = mappedInput.getApiIndex();
+        id = mappedInput.getId();
+        mappedName = mappedInput.getMappedName();
+        apiIndex = mappedInput.getApiIndex();
     }
 
     public long getId() {
@@ -53,11 +63,19 @@ public class MappedInputItem {
         this.apiIndex = apiIndex;
     }
 
-    public boolean isLoaded() {
-        return isLoaded;
+    public DigitalInputMode getMode() {
+        return mode;
     }
 
-    public void setLoaded(boolean loaded) {
-        isLoaded = loaded;
+    public void setMode(DigitalInputMode mode) {
+        this.mode = mode;
+    }
+
+    public DigitalInputStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DigitalInputStatus status) {
+        this.status = status;
     }
 }

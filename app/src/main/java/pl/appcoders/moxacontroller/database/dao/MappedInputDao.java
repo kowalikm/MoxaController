@@ -1,5 +1,6 @@
 package pl.appcoders.moxacontroller.database.dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,7 +14,7 @@ import pl.appcoders.moxacontroller.database.entity.MappedInput;
 @Dao
 public interface MappedInputDao {
     @Query("SELECT * FROM mapped_inputs")
-    public List<MappedInput> findAll();
+    public LiveData<List<MappedInput>> findAll();
 
     @Query("SELECT * FROM mapped_inputs WHERE id = :id")
     public MappedInput findById(long id);

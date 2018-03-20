@@ -1,14 +1,20 @@
 package pl.appcoders.moxacontroller.inputs;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
@@ -16,12 +22,14 @@ import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
 public class MappedInputFragment extends Fragment implements OnRefreshActionListener {
 
     private OnListFragmentInteractionListener listener;
-    private MappedInputController mappedInputController;
+    private MappedInputViewModel mappedInputViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Mapped inputs");
+        mappedInputViewModel = ViewModelProviders.of(this)
+                .get(MappedInputViewModel.class);
     }
 
     @Override
@@ -29,17 +37,24 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mappedinput_list, container, false);
 
-        mappedInputController = new MappedInputController(view.getContext());
+        Context context = view.getContext();
 
-        if (view instanceof RecyclerView) {
-            Log.i("Recycler view maping", "Mapping adapter");
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) getActivity().findViewById(R.id.list);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(mappedInputController.getMappedInputItems(), listener));
-        }
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.mapInputFab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), MapInputActivity.class));
+            }
+        });
 
-        mappedInputController.refreshMappedInputs();
+        final RecyclerView recyclerView = view.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        mappedInputViewModel.getMappedInputItemList().observe(this, new Observer<List<MappedInputItem>>() {
+            @Override
+            public void onChanged(@Nullable List<MappedInputItem> mappedInputItems) {
+                recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(mappedInputItems, listener));
+            }
+        });
 
         return view;
     }
@@ -64,7 +79,7 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
 
     @Override
     public void refreshAction() {
-
+        mappedInputViewModel.refreshRestData();
     }
 
     public interface OnListFragmentInteractionListener {

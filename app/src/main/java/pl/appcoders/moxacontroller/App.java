@@ -6,10 +6,6 @@ import pl.appcoders.moxacontroller.di.AppModule;
 import pl.appcoders.moxacontroller.di.ApplicationComponent;
 import pl.appcoders.moxacontroller.di.DaggerApplicationComponent;
 
-/**
- * Created by mkowalik on 08.03.18.
- */
-
 public class App extends Application {
 
     private static App app;
