@@ -11,5 +11,7 @@ public class MapInputActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_input);
+        //TODO: add digital input to spinner
+        //TODO: handle insert
     }
 }
