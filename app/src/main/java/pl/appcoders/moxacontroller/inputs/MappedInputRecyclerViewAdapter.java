@@ -28,8 +28,9 @@ public class MappedInputRecyclerViewAdapter extends RecyclerView.Adapter<MappedI
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mIdView.setText(mappedInputItemList.get(position).getMappedName());
-        holder.mContentView.setText(mappedInputItemList.get(position).getCounterValue());
+        MappedInputItem item = mappedInputItemList.get(position);
+        holder.mIdView.setText(item.getMappedName());
+        holder.mContentView.setText(item.getInfo());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

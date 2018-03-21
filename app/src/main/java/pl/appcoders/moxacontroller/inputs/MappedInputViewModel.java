@@ -25,6 +25,7 @@ import pl.appcoders.moxacontroller.database.entity.MappedInput;
 import pl.appcoders.moxacontroller.inputs.dto.Di;
 import pl.appcoders.moxacontroller.inputs.dto.DigitalInputs;
 import pl.appcoders.moxacontroller.inputs.service.DigitalInputService;
+import pl.appcoders.moxacontroller.main.OnRestActionListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +35,8 @@ public class MappedInputViewModel extends ViewModel {
     private MutableLiveData<DigitalInputs> digitalInputsMutableLiveData;
     private LiveData<List<MappedInput>> mappedInputsLiveData;
 
+    private OnRestActionListener onRestActionListener;
+
     @Inject
     MappedInputDao mappedInputDao;
 
@@ -42,7 +45,7 @@ public class MappedInputViewModel extends ViewModel {
 
     public MappedInputViewModel() {
         App.getInstance().getApplicationComponent().inject(this);
-        initalizeMappedInputs();
+        initializeMappedInputs();
     }
 
     LiveData<List<MappedInputItem>> getMappedInputItemList() {
@@ -57,11 +60,11 @@ public class MappedInputViewModel extends ViewModel {
         return digitalInputsMutableLiveData;
     }
 
-    LiveData<List<MappedInputItem>> getMappedInputList() {
-        return mappedInputItemListMediatorLiveData;
-    }
-
     void refreshRestData() {
+        if(isOnRestActionListenerRegistered()) {
+            onRestActionListener.requestStartedAction();
+            Log.i("requested", "action");
+        }
         digitalInputService.getDigitalInputs().enqueue(new Callback<DigitalInputs>() {
             @Override
             public void onResponse(Call<DigitalInputs> call, Response<DigitalInputs> response) {
@@ -70,16 +73,35 @@ public class MappedInputViewModel extends ViewModel {
                 } else {
                     Log.w("GetDigitalInputResponse", response.message());
                 }
+
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.responseAction(response);
+                }
             }
 
             @Override
             public void onFailure(Call<DigitalInputs> call, Throwable t) {
                 Log.w("GetSDigitalInputFailure", t.getMessage());
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.failureAction(t);
+                }
             }
         });
     }
 
-    private void initalizeMappedInputs() {
+    public void registerOnRestActionListener(OnRestActionListener onRestActionListener) {
+        this.onRestActionListener = onRestActionListener;
+    }
+
+    public void unregisterOnRestActionListener() {
+        this.onRestActionListener = null;
+    }
+
+    private boolean isOnRestActionListenerRegistered() {
+        return this.onRestActionListener != null;
+    }
+
+    private void initializeMappedInputs() {
         mappedInputsLiveData = mappedInputDao.findAll();
         mappedInputItemListMediatorLiveData.addSource(mappedInputsLiveData, new Observer<List<MappedInput>>() {
             @Override
@@ -93,7 +115,7 @@ public class MappedInputViewModel extends ViewModel {
             }
         });
 
-        mappedInputItemListMediatorLiveData.addSource(digitalInputsMutableLiveData, new Observer<DigitalInputs>() {
+        mappedInputItemListMediatorLiveData.addSource(getDigitalInputs(), new Observer<DigitalInputs>() {
             @Override
             public void onChanged(@Nullable DigitalInputs digitalInputs) {
                 final List<MappedInput> mappedInputList = mappedInputsLiveData.getValue();
@@ -121,11 +143,11 @@ public class MappedInputViewModel extends ViewModel {
     private void updateMappedInputItem(MappedInputItem mappedInputItem, Di digitalInput) {
         switch (digitalInput.getDiMode()) {
             case 0:
-                mappedInputItem.setMode(MappedInputItem.DigitalInputMode.INPUT_MODE);
+                mappedInputItem.setMode(MappedInputItem.DigitalInputMode.INPUT);
                 mappedInputItem.setStatus(MappedInputItem.DigitalInputStatus.values()[digitalInput.getDiStatus()]);
                 break;
             case 1:
-                mappedInputItem.setMode(MappedInputItem.DigitalInputMode.COUNTER_MODE);
+                mappedInputItem.setMode(MappedInputItem.DigitalInputMode.COUNTER);
                 mappedInputItem.setStatus(MappedInputItem.DigitalInputStatus.values()[digitalInput.getDiCounterStatus()]);
                 mappedInputItem.setCounterValue(digitalInput.getDiCounterValue());
                 break;

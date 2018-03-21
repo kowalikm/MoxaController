@@ -11,13 +11,13 @@ public class MappedInputItem {
     private DigitalInputStatus status;
 
     public enum DigitalInputMode {
-        INPUT_MODE,
-        COUNTER_MODE
+        INPUT,
+        COUNTER
     }
 
     public enum DigitalInputStatus {
-        OFF_STATUS,
-        ON_STATUS
+        OFF,
+        ON
     }
 
     public MappedInputItem(long id, String mappedName) {
@@ -77,5 +77,16 @@ public class MappedInputItem {
 
     public void setStatus(DigitalInputStatus status) {
         this.status = status;
+    }
+
+    public String getInfo() {
+        switch (mode) {
+            case INPUT:
+                return "Status: " + status.name();
+            case COUNTER:
+                return "Counter value: " + counterValue;
+            default:
+                throw new IllegalArgumentException("MappedInputItem mode not supported!");
+        }
     }
 }

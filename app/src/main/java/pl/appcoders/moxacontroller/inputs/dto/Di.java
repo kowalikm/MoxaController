@@ -94,4 +94,9 @@ public class Di {
         this.diStatus = diStatus;
     }
 
+    @Override
+    public String toString() {
+        return "Digital Input " + getDiIndex();
+    }
+
 }

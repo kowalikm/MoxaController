@@ -1,5 +1,6 @@
 package pl.appcoders.moxacontroller.systeminfo;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
@@ -19,9 +19,8 @@ import pl.appcoders.moxacontroller.main.OnRestActionListener;
 import pl.appcoders.moxacontroller.systeminfo.dto.Device;
 import pl.appcoders.moxacontroller.systeminfo.dto.LAN;
 import pl.appcoders.moxacontroller.systeminfo.dto.SystemInfo;
-import retrofit2.Response;
 
-public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener, OnRestActionListener {
+public class SystemInfoItemFragment extends Fragment implements OnRefreshActionListener {
 
     private SystemInfoViewModel systemInfoViewModel;
 
@@ -31,7 +30,9 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
         getActivity().setTitle(R.string.device_status);
         systemInfoViewModel = ViewModelProviders.of(this)
                 .get(SystemInfoViewModel.class);
-        systemInfoViewModel.registerOnRestActionListener(this);
+
+        registerRestActionListener();
+
         systemInfoViewModel.getIsConnected().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String isConnected) {
@@ -78,22 +79,14 @@ public class SystemInfoItemFragment extends Fragment implements OnRefreshActionL
         systemInfoViewModel.refresh();
     }
 
-
-    @Override
-    public void requestStartedAction() {
-        Toast.makeText(getContext(), R.string.refreshingMessage, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void responseAction(Response response) {
-        if(!response.isSuccessful()) {
-            Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
+    private void registerRestActionListener() {
+        Activity activity = getActivity();
+        if(activity instanceof OnRestActionListener) {
+            systemInfoViewModel.registerOnRestActionListener((OnRestActionListener)getActivity());
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnRestActionListener!");
         }
-    }
-
-    @Override
-    public void failureAction(Throwable t) {
-        Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void setTextViewText(int id, String text) {

@@ -1,5 +1,6 @@
 package pl.appcoders.moxacontroller.inputs;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
+import pl.appcoders.moxacontroller.main.OnRestActionListener;
 
 public class MappedInputFragment extends Fragment implements OnRefreshActionListener {
 
@@ -30,6 +32,8 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
         getActivity().setTitle("Mapped inputs");
         mappedInputViewModel = ViewModelProviders.of(this)
                 .get(MappedInputViewModel.class);
+
+        registerRestActionListener();
     }
 
     @Override
@@ -78,11 +82,27 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
     }
 
     @Override
+    public void onStop() {
+        mappedInputViewModel.unregisterOnRestActionListener();
+        super.onStop();
+    }
+
+    @Override
     public void refreshAction() {
         mappedInputViewModel.refreshRestData();
     }
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(MappedInputItem item);
+    }
+
+    private void registerRestActionListener() {
+        Activity activity = getActivity();
+        if(activity instanceof OnRestActionListener) {
+            mappedInputViewModel.registerOnRestActionListener((OnRestActionListener)getActivity());
+        } else {
+            throw new RuntimeException(activity.toString()
+                    + " must implement OnRestActionListener!");
+        }
     }
 }

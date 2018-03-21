@@ -14,15 +14,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.inputs.MappedInputItem;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
 import pl.appcoders.moxacontroller.systeminfo.SystemInfoItemFragment;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements MappedInputFragment.OnListFragmentInteractionListener {
+        implements MappedInputFragment.OnListFragmentInteractionListener, OnRestActionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -58,6 +60,28 @@ public class MainActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListFragmentInteraction(MappedInputItem item) {
+
+    }
+
+    @Override
+    public void requestStartedAction() {
+        Toast.makeText(this, R.string.refreshingMessage, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void responseAction(Response response) {
+        if(!response.isSuccessful()) {
+            Toast.makeText(this, response.message(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void failureAction(Throwable t) {
+        Toast.makeText(this, t.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void menuRefreshHandler() {
@@ -116,10 +140,5 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             navigationView.getMenu().performIdentifierAction(R.id.nav_device_status, 0);
         }
-    }
-
-    @Override
-    public void onListFragmentInteraction(MappedInputItem item) {
-
     }
 }
