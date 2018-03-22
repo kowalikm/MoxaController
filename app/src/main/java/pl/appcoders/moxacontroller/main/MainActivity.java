@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.inputs.MappedInputDetailsActivity;
 import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.inputs.MappedInputItem;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
@@ -64,7 +65,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(MappedInputItem item) {
-
+        final Intent intent = new Intent(this, MappedInputDetailsActivity.class);
+        intent.putExtra(item.getClass().getCanonicalName(), item);
+        startActivity(intent);
     }
 
     @Override

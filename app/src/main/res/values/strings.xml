@@ -29,4 +29,12 @@
     <string name="error">Error</string>
     <string name="map_input">Map input</string>
     <string name="refreshingMessage">Refreshing...</string>
+    <string name="di_index_title">Digital input index</string>
+    <string name="di_mode_title">Mode</string>
+    <string name="di_status_title">Status</string>
+    <string name="di_counter_value_title">Counter value</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_remove">Remove</string>
+    <string name="input_details">Digital input details</string>
+    <string name="di_name_title">Mapped name</string>
 </resources>
