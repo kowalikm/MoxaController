@@ -3,6 +3,7 @@ package pl.appcoders.moxacontroller.di;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import javax.inject.Singleton;
 
@@ -26,6 +27,7 @@ class RestModule {
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 if(key.contentEquals("deviceAddress") || key.contentEquals("restfulApiEndpoint")) {
                     createRetrofitInstance(sharedPreferences);
+                    Log.i("Shared prefferences", "Setting shared preferences");
                 }
             }
         });
@@ -53,6 +55,16 @@ class RestModule {
     }
 
     private void createRetrofitInstance(SharedPreferences sharedPreferences) {
+        try {
+            createRetrofit(sharedPreferences);
+        } catch (IllegalArgumentException ex) { //If wrong address provided
+            Log.w("Retrofit", ex.getMessage());
+            sharedPreferences.edit().remove("deviceAddress").apply();
+            createRetrofit(sharedPreferences);
+        }
+    }
+
+    private void createRetrofit(SharedPreferences sharedPreferences) {
         retrofit = new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(getApiBaseUrl(sharedPreferences)).build();
     }
@@ -60,6 +72,7 @@ class RestModule {
     private String getApiBaseUrl(SharedPreferences sharedPreferences) {
         String apiAddress = sharedPreferences.getString("deviceAddress", "http://127.0.0.1");
         String apiEndpoint = sharedPreferences.getString("restfulApiEndpoint", "/api/slot/0/");
+        Log.i("URL", "Finished url: " + apiAddress + apiEndpoint);
         return apiAddress + apiEndpoint;
     }
 
