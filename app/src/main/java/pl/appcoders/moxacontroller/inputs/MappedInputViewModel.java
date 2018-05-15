@@ -81,7 +81,7 @@ public class MappedInputViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<DigitalInputs> call, Throwable t) {
-                Log.w("GetSDigitalInputFailure", t.getMessage());
+                Log.w("GetDigitalInputFailure", t.getMessage());
                 if(isOnRestActionListenerRegistered()) {
                     onRestActionListener.failureAction(t);
                 }
