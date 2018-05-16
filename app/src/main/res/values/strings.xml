@@ -37,4 +37,5 @@
     <string name="menu_remove">Remove</string>
     <string name="input_details">Digital input details</string>
     <string name="di_name_title">Mapped name</string>
+    <string name="button_reset_counter">Reset counter</string>
 </resources>

@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import pl.appcoders.moxacontroller.inputs.MapInputActivity;
+import pl.appcoders.moxacontroller.inputs.MappedInputDetailsActivity;
 import pl.appcoders.moxacontroller.inputs.MappedInputViewModel;
 import pl.appcoders.moxacontroller.systeminfo.SystemInfoViewModel;
 
@@ -14,4 +15,5 @@ public interface ApplicationComponent {
     void inject(SystemInfoViewModel systemInfoViewModel);
     void inject(MappedInputViewModel mappedInputViewModel);
     void inject(MapInputActivity mapInputActivity);
+    void inject(MappedInputDetailsActivity mappedInputDetailsActivity);
 }

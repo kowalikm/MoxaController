@@ -2,29 +2,50 @@ package pl.appcoders.moxacontroller.inputs;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
+import pl.appcoders.moxacontroller.App;
 import pl.appcoders.moxacontroller.R;
+import pl.appcoders.moxacontroller.database.dao.MappedInputDao;
 
 public class MappedInputDetailsActivity extends AppCompatActivity {
 
     private MappedInputViewModel mappedInputViewModel;
     private MappedInputItem mappedInputItem;
 
+    @Inject
+    MappedInputDao mappedInputDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapped_input_details);
+        App.getInstance().getApplicationComponent().inject(this);
+
+        final Button resetCounterButton = findViewById(R.id.reset_counter_button);
+        resetCounterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: reset counter REST call
+            }
+        });
+
         mappedInputViewModel = ViewModelProviders.of(this)
                 .get(MappedInputViewModel.class);
         mappedInputItem = getIntent().getParcelableExtra(MappedInputItem.class.getCanonicalName());
@@ -65,8 +86,11 @@ public class MappedInputDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_refresh:
+            case R.id.refreshOption:
                 menuRefreshHandler();
+                return true;
+            case R.id.removeOption:
+                menuRemoveHandler();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -74,6 +98,22 @@ public class MappedInputDetailsActivity extends AppCompatActivity {
 
     private void menuRefreshHandler() {
         mappedInputViewModel.refreshRestData();
+    }
+
+    private void menuRemoveHandler() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == DialogInterface.BUTTON_POSITIVE) {
+                    mappedInputDao.deleteById(mappedInputItem.getId());
+                    finish();
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
     private void setTextViewText(int id, String text) {
@@ -84,11 +124,13 @@ public class MappedInputDetailsActivity extends AppCompatActivity {
     private void setInputView() {
         findViewById(R.id.diInputLayout).setVisibility(LinearLayout.VISIBLE);
         findViewById(R.id.diCounterLayout).setVisibility(LinearLayout.GONE);
+        findViewById(R.id.reset_counter_layout).setVisibility(LinearLayout.GONE);
     }
 
     private void setCounterView() {
         findViewById(R.id.diInputLayout).setVisibility(LinearLayout.GONE);
         findViewById(R.id.diCounterLayout).setVisibility(LinearLayout.VISIBLE);
+        findViewById(R.id.reset_counter_layout).setVisibility(LinearLayout.VISIBLE);
     }
 
     private String getStatusString(MappedInputItem.DigitalInputStatus status) {

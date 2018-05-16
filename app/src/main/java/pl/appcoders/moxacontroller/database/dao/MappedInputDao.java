@@ -22,6 +22,9 @@ public interface MappedInputDao {
     @Query("SELECT * FROM mapped_inputs WHERE mapped_name = :mappedName")
     public MappedInput findByName(String mappedName);
 
+    @Query("DELETE FROM mapped_inputs WHERE id = :id")
+    public void deleteById(long id);
+
     @Insert
     public long insert(MappedInput mappedInput);
 
