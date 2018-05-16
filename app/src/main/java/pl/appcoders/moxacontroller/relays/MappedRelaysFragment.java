@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.inputs;
+package pl.appcoders.moxacontroller.relays;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
@@ -21,47 +21,49 @@ import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.main.OnRefreshActionListener;
 import pl.appcoders.moxacontroller.main.OnRestActionListener;
 
-public class MappedInputFragment extends Fragment implements OnRefreshActionListener {
+/**
+ * Created by mkowalik on 16.05.18.
+ */
 
+public class MappedRelaysFragment extends Fragment implements OnRefreshActionListener {
     private OnListFragmentInteractionListener listener;
-    private MappedInputViewModel mappedInputViewModel;
+    private MappedRelaysViewModel mappedRelaysViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle("Mapped inputs");
-        mappedInputViewModel = ViewModelProviders.of(this)
-                .get(MappedInputViewModel.class);
+        getActivity().setTitle("Mapped relays");
+        mappedRelaysViewModel = ViewModelProviders.of(this)
+                .get(MappedRelaysViewModel.class);
         registerRestActionListener();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mappedinput_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_mappedrelay_list, container, false);
 
         Context context = view.getContext();
 
-        FloatingActionButton floatingActionButton = view.findViewById(R.id.mapInputFab);
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.mapRelayFab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), MapInputActivity.class));
+                startActivity(new Intent(getContext(), MapRelayActivity.class));
             }
         });
 
         final RecyclerView recyclerView = view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mappedInputViewModel.getMappedInputItemList().observe(this, new Observer<List<MappedInputItem>>() {
+        mappedRelaysViewModel.getMappedRelayItemList().observe(this, new Observer<List<MappedRelayItem>>() {
             @Override
-            public void onChanged(@Nullable List<MappedInputItem> mappedInputItems) {
-                recyclerView.setAdapter(new MappedInputRecyclerViewAdapter(mappedInputItems, listener));
+            public void onChanged(@Nullable List<MappedRelayItem> mappedRelayItems) {
+                recyclerView.setAdapter(new MappedRelaysRecyclerViewAdapter(mappedRelayItems, listener));
             }
         });
 
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -83,23 +85,23 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
 
     @Override
     public void onStop() {
-        mappedInputViewModel.unregisterOnRestActionListener();
+        mappedRelaysViewModel.unregisterOnRestActionListener();
         super.onStop();
     }
 
     @Override
     public void refreshAction() {
-        mappedInputViewModel.refreshRestData();
+        mappedRelaysViewModel.refreshRestData();
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(MappedInputItem item);
+        void onListFragmentInteraction(MappedRelayItem item);
     }
 
     private void registerRestActionListener() {
         Activity activity = getActivity();
         if(activity instanceof OnRestActionListener) {
-            mappedInputViewModel.registerOnRestActionListener((OnRestActionListener)getActivity());
+            mappedRelaysViewModel.registerOnRestActionListener((OnRestActionListener)getActivity());
         } else {
             throw new RuntimeException(activity.toString()
                     + " must implement OnRestActionListener!");

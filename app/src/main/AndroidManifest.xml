@@ -33,6 +33,12 @@
         <activity android:name=".inputs.MappedInputDetailsActivity"
             android:label="@string/input_details"
             android:parentActivityName=".main.MainActivity" />
+        <activity android:name=".relays.MapRelayActivity"
+            android:label="@string/map_relay"
+            android:parentActivityName=".main.MainActivity" />
+        <activity android:name=".relays.MappedRelayDetailsActivity"
+            android:label="@string/relay_details"
+            android:parentActivityName=".main.MainActivity" />
     </application>
 
 </manifest>

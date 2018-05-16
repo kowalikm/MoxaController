@@ -18,14 +18,18 @@ import android.widget.Toast;
 
 import pl.appcoders.moxacontroller.R;
 import pl.appcoders.moxacontroller.inputs.MappedInputDetailsActivity;
-import pl.appcoders.moxacontroller.inputs.MappedInputFragment;
 import pl.appcoders.moxacontroller.inputs.MappedInputItem;
+import pl.appcoders.moxacontroller.inputs.MappedInputsFragment;
+import pl.appcoders.moxacontroller.relays.MappedRelayDetailsActivity;
+import pl.appcoders.moxacontroller.relays.MappedRelayItem;
+import pl.appcoders.moxacontroller.relays.MappedRelaysFragment;
 import pl.appcoders.moxacontroller.settings.SettingsActivity;
 import pl.appcoders.moxacontroller.systeminfo.SystemInfoItemFragment;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements MappedInputFragment.OnListFragmentInteractionListener, OnRestActionListener {
+        implements MappedInputsFragment.OnListFragmentInteractionListener,
+        MappedRelaysFragment.OnListFragmentInteractionListener, OnRestActionListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -66,6 +70,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(MappedInputItem item) {
         final Intent intent = new Intent(this, MappedInputDetailsActivity.class);
+        intent.putExtra(item.getClass().getCanonicalName(), item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListFragmentInteraction(MappedRelayItem item) {
+        final Intent intent = new Intent(this, MappedRelayDetailsActivity.class);
         intent.putExtra(item.getClass().getCanonicalName(), item);
         startActivity(intent);
     }
@@ -125,10 +136,10 @@ public class MainActivity extends AppCompatActivity
                         fragment = new SystemInfoItemFragment();
                         break;
                     case R.id.nav_inputs:
-                        fragment = new MappedInputFragment();
+                        fragment = new MappedInputsFragment();
                         break;
                     case R.id.nav_relays:
-                        fragment = new SystemInfoItemFragment();
+                        fragment = new MappedRelaysFragment();
                         break;
                 }
 

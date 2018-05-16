@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.inputs;
+package pl.appcoders.moxacontroller.relays;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,38 +23,42 @@ import javax.inject.Inject;
 
 import pl.appcoders.moxacontroller.App;
 import pl.appcoders.moxacontroller.R;
-import pl.appcoders.moxacontroller.database.dao.MappedInputDao;
+import pl.appcoders.moxacontroller.database.dao.MappedRelayDao;
 import pl.appcoders.moxacontroller.main.OnRestActionListener;
 import retrofit2.Response;
 
-public class MappedInputDetailsActivity extends AppCompatActivity implements OnRestActionListener {
+/**
+ * Created by mkowalik on 17.05.18.
+ */
 
-    private MappedInputsViewModel mappedInputsViewModel;
-    private MappedInputItem mappedInputItem;
+public class MappedRelayDetailsActivity extends AppCompatActivity implements OnRestActionListener {
+
+    private MappedRelaysViewModel mappedRelaysViewModel;
+    private MappedRelayItem mappedRelayItem;
 
     @Inject
-    MappedInputDao mappedInputDao;
+    MappedRelayDao mappedRelayDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mapped_input_details);
+        setContentView(R.layout.activity_mapped_relay_details);
         App.getInstance().getApplicationComponent().inject(this);
 
         setResetCounterButtonListener();
 
-        mappedInputItem = getIntent().getParcelableExtra(MappedInputItem.class.getCanonicalName());
-        mappedInputsViewModel = ViewModelProviders.of(this)
-                .get(MappedInputsViewModel.class);
+        mappedRelayItem = getIntent().getParcelableExtra(MappedRelayItem.class.getCanonicalName());
+        mappedRelaysViewModel = ViewModelProviders.of(this)
+                .get(MappedRelaysViewModel.class);
 
         registerRestActionListener();
-        observeMappedInputItemList();
+        observeMappedRelayItemList();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.input_details_menu, menu);
+        inflater.inflate(R.menu.relay_details_menu, menu);
         return true;
     }
 
@@ -89,7 +93,7 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
     }
 
     private void menuRefreshHandler() {
-        mappedInputsViewModel.refreshRestData();
+        mappedRelaysViewModel.refreshRestData();
     }
 
     private void menuRemoveHandler() {
@@ -97,7 +101,7 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(which == DialogInterface.BUTTON_POSITIVE) {
-                    mappedInputDao.deleteById(mappedInputItem.getId());
+                    mappedRelayDao.deleteById(mappedRelayItem.getId());
                     finish();
                 }
             }
@@ -110,32 +114,33 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
 
     private void registerRestActionListener() {
         if(this instanceof OnRestActionListener) {
-            mappedInputsViewModel.registerOnRestActionListener((OnRestActionListener)this);
+            mappedRelaysViewModel.registerOnRestActionListener((OnRestActionListener)this);
         } else {
             throw new RuntimeException(this.toString()
                     + " must implement OnRestActionListener!");
         }
     }
 
-    private void observeMappedInputItemList() {
-        mappedInputsViewModel.getMappedInputItemList().observe(this, new Observer<List<MappedInputItem>>() {
+    private void observeMappedRelayItemList() {
+        mappedRelaysViewModel.getMappedRelayItemList().observe(this, new Observer<List<MappedRelayItem>>() {
             @Override
-            public void onChanged(@Nullable List<MappedInputItem> mappedInputItems) {
-                Log.i("MappedInputDetails", "MappedInputItemsChanged!");
-                for(MappedInputItem item : mappedInputItems) {
-                    if(item.getId() == mappedInputItem.getId()) {
-                        setTextViewText(R.id.diNameValue, item.getMappedName());
-                        setTextViewText(R.id.diIndexValue, "/api/slot/0/io/di/" + Integer.toString(item.getApiIndex()));
+            public void onChanged(@Nullable List<MappedRelayItem> mappedRelayItems) {
+                Log.i("MappedRelayDetails", "MappedRelayItemsChanged!");
+                for(MappedRelayItem item : mappedRelayItems) {
+                    if(item.getId() == mappedRelayItem.getId()) {
+                        mappedRelayItem = item;
+                        setTextViewText(R.id.relayNameValue, item.getMappedName());
+                        setTextViewText(R.id.relayIndexValue, "/api/slot/0/io/relay/" + Integer.toString(item.getApiIndex()));
                         switch (item.getMode()) {
-                            case INPUT:
-                                setInputView();
-                                setTextViewText(R.id.diModeValue, "Input");
-                                setTextViewText(R.id.diStatusValue, getStatusString(item.getStatus()));
+                            case RELAY:
+                                setRelayView();
+                                setTextViewText(R.id.relayModeValue, "Relay");
+                                setTextViewText(R.id.relayStatusValue, getStatusString(item.getStatus()));
                                 break;
-                            case COUNTER:
+                            case PULSE:
                                 setCounterView();
-                                setTextViewText(R.id.diModeValue, "Counter");
-                                setTextViewText(R.id.diCounterValue, Integer.toString(item.getCounterValue()));
+                                setTextViewText(R.id.relayModeValue, "Pulse");
+                                setTextViewText(R.id.relayPulseStatusValue, getPulseStatusString(item.getStatus()));
                                 break;
                         }
                     }
@@ -145,11 +150,12 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
     }
 
     private void setResetCounterButtonListener() {
-        final Button resetCounterButton = findViewById(R.id.reset_counter_button);
+        final Button resetCounterButton = findViewById(R.id.change_relay_state_button);
         resetCounterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mappedInputsViewModel.resetDiCounter(mappedInputItem.getApiIndex());
+                mappedRelaysViewModel.changeRelayState(mappedRelayItem.getApiIndex(),
+                        mappedRelayItem.getStatus() == MappedRelayItem.RelayStatus.OFF ? 1 : 0);
             }
         });
     }
@@ -159,19 +165,21 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
         textView.setText(text);
     }
 
-    private void setInputView() {
-        findViewById(R.id.diInputLayout).setVisibility(LinearLayout.VISIBLE);
-        findViewById(R.id.diCounterLayout).setVisibility(LinearLayout.GONE);
-        findViewById(R.id.reset_counter_layout).setVisibility(LinearLayout.GONE);
+    private void setRelayView() {
+        findViewById(R.id.relayRelayLayout).setVisibility(LinearLayout.VISIBLE);
+        findViewById(R.id.relayPulseLayout).setVisibility(LinearLayout.GONE);
+        findViewById(R.id.change_relay_state_layout).setVisibility(LinearLayout.VISIBLE);
+        findViewById(R.id.change_pulse_state_layout).setVisibility(LinearLayout.GONE);
     }
 
     private void setCounterView() {
-        findViewById(R.id.diInputLayout).setVisibility(LinearLayout.GONE);
-        findViewById(R.id.diCounterLayout).setVisibility(LinearLayout.VISIBLE);
-        findViewById(R.id.reset_counter_layout).setVisibility(LinearLayout.VISIBLE);
+        findViewById(R.id.relayRelayLayout).setVisibility(LinearLayout.GONE);
+        findViewById(R.id.relayPulseLayout).setVisibility(LinearLayout.VISIBLE);
+        findViewById(R.id.change_relay_state_layout).setVisibility(LinearLayout.GONE);
+        findViewById(R.id.change_pulse_state_layout).setVisibility(LinearLayout.VISIBLE);
     }
 
-    private String getStatusString(MappedInputItem.DigitalInputStatus status) {
+    private String getStatusString(MappedRelayItem.RelayStatus status) {
         String statusString = "";
         switch (status) {
             case ON:
@@ -179,6 +187,20 @@ public class MappedInputDetailsActivity extends AppCompatActivity implements OnR
                 break;
             case OFF:
                 statusString = "OFF";
+                break;
+        }
+
+        return statusString;
+    }
+
+    private String getPulseStatusString(MappedRelayItem.RelayStatus status) {
+        String statusString = "";
+        switch (status) {
+            case ON:
+                statusString = "START";
+                break;
+            case OFF:
+                statusString = "STOP";
                 break;
         }
 

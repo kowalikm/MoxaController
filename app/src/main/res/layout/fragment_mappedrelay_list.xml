@@ -7,14 +7,14 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
-        android:name="pl.appcoders.moxacontroller.inputs.MappedInputFragment"
+        android:name="pl.appcoders.moxacontroller.inputs.MappedRelaysFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
-        tools:context="pl.appcoders.moxacontroller.inputs.MappedInputsFragment" />
+        tools:context="pl.appcoders.moxacontroller.inputs.MappedRelaysFragment" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/mapInputFab"
+        android:id="@+id/mapRelayFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

@@ -38,4 +38,10 @@
     <string name="input_details">Digital input details</string>
     <string name="di_name_title">Mapped name</string>
     <string name="button_reset_counter">Reset counter</string>
+    <string name="relay_index_title">Relay index</string>
+    <string name="relay_pulse_status_title">Status</string>
+    <string name="relay_status_title">Status</string>
+    <string name="button_change_state">Change state</string>
+    <string name="map_relay">Map relay</string>
+    <string name="relay_details">Relay details</string>
 </resources>

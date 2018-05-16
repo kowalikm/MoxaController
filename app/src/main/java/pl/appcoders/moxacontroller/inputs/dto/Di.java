@@ -96,7 +96,7 @@ public class Di {
 
     @Override
     public String toString() {
-        return "Digital Input " + getDiIndex();
+        return "/io/di/" + getDiIndex();
     }
 
 }

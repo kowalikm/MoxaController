@@ -23,7 +23,7 @@ import pl.appcoders.moxacontroller.inputs.dto.DigitalInputs;
 
 public class MapInputActivity extends AppCompatActivity {
 
-    private MappedInputViewModel mappedInputViewModel;
+    private MappedInputsViewModel mappedInputsViewModel;
     private EditText mappedNameEditText;
     private Spinner spinner;
 
@@ -37,12 +37,12 @@ public class MapInputActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map_input);
         App.getInstance().getApplicationComponent().inject(this);
 
-        mappedInputViewModel = ViewModelProviders.of(this)
-                .get(MappedInputViewModel.class);
+        mappedInputsViewModel = ViewModelProviders.of(this)
+                .get(MappedInputsViewModel.class);
 
         mappedNameEditText = findViewById(R.id.mappedNameEditText);
         spinner = findViewById(R.id.diSpinner);
-        mappedInputViewModel.getDigitalInputs().observe(this, new Observer<DigitalInputs>() {
+        mappedInputsViewModel.getDigitalInputs().observe(this, new Observer<DigitalInputs>() {
                     @Override
                     public void onChanged(@Nullable DigitalInputs digitalInputs) {
                         if(digitalInputs != null) {

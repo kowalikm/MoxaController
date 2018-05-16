@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import pl.appcoders.moxacontroller.inputs.service.DigitalInputService;
+import pl.appcoders.moxacontroller.relays.service.RelaysService;
 import pl.appcoders.moxacontroller.systeminfo.service.SystemInfoService;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,6 +53,11 @@ class RestModule {
     @Provides
     DigitalInputService digitalInputService(Retrofit retrofit) {
         return retrofit.create(DigitalInputService.class);
+    }
+
+    @Provides
+    RelaysService relaysService(Retrofit retrofit) {
+        return retrofit.create(RelaysService.class);
     }
 
     private void createRetrofitInstance(SharedPreferences sharedPreferences) {

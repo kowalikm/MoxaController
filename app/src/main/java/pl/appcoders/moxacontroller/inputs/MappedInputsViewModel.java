@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MappedInputViewModel extends ViewModel {
+public class MappedInputsViewModel extends ViewModel {
     private MediatorLiveData<List<MappedInputItem>> mappedInputItemListMediatorLiveData = new MediatorLiveData<>();
     private MutableLiveData<DigitalInputs> digitalInputsMutableLiveData;
     private LiveData<List<MappedInput>> mappedInputsLiveData;
@@ -45,7 +45,7 @@ public class MappedInputViewModel extends ViewModel {
     @Inject
     DigitalInputService digitalInputService;
 
-    public MappedInputViewModel() {
+    public MappedInputsViewModel() {
         App.getInstance().getApplicationComponent().inject(this);
         initializeMappedInputs();
     }

@@ -1,4 +1,4 @@
-package pl.appcoders.moxacontroller.inputs;
+package pl.appcoders.moxacontroller.relays;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,14 +8,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import pl.appcoders.moxacontroller.inputs.MappedInputFragment.OnListFragmentInteractionListener;
+import pl.appcoders.moxacontroller.relays.MappedRelaysFragment.OnListFragmentInteractionListener;
 
-public class MappedInputRecyclerViewAdapter extends RecyclerView.Adapter<MappedInputRecyclerViewAdapter.ViewHolder> {
+/**
+ * Created by mkowalik on 16.05.18.
+ */
+
+class MappedRelaysRecyclerViewAdapter extends RecyclerView.Adapter<MappedRelaysRecyclerViewAdapter.ViewHolder> {
     private final OnListFragmentInteractionListener listener;
-    private List<MappedInputItem> mappedInputItemList;
+    private List<MappedRelayItem> mappedRelayItemList;
 
-    public MappedInputRecyclerViewAdapter(List<MappedInputItem> mappedInputItemList, OnListFragmentInteractionListener listener) {
-        this.mappedInputItemList = mappedInputItemList;
+    public MappedRelaysRecyclerViewAdapter(List<MappedRelayItem> mappedInputItemList, OnListFragmentInteractionListener listener) {
+        this.mappedRelayItemList = mappedInputItemList;
         this.listener = listener;
     }
 
@@ -28,7 +32,7 @@ public class MappedInputRecyclerViewAdapter extends RecyclerView.Adapter<MappedI
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        MappedInputItem item = mappedInputItemList.get(position);
+        MappedRelayItem item = mappedRelayItemList.get(position);
         holder.mIdView.setText(item.getMappedName());
         holder.mContentView.setText(item.getInfo());
         holder.mItem = item;
@@ -45,14 +49,14 @@ public class MappedInputRecyclerViewAdapter extends RecyclerView.Adapter<MappedI
 
     @Override
     public int getItemCount() {
-        return mappedInputItemList.size();
+        return mappedRelayItemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public MappedInputItem mItem;
+        public MappedRelayItem mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -67,3 +71,4 @@ public class MappedInputRecyclerViewAdapter extends RecyclerView.Adapter<MappedI
         }
     }
 }
+
