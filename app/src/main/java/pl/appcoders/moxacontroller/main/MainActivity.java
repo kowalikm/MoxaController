@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void requestStartedAction() {
-        Toast.makeText(this, R.string.refreshingMessage, Toast.LENGTH_SHORT).show();
+    public void requestStartedAction(String requestInfo) {
+        Toast.makeText(this, requestInfo, Toast.LENGTH_SHORT).show();
     }
 
     @Override

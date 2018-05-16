@@ -3,7 +3,7 @@ package pl.appcoders.moxacontroller.main;
 import retrofit2.Response;
 
 public interface OnRestActionListener {
-    void requestStartedAction();
+    void requestStartedAction(String requestInfo);
 
     void responseAction(Response response);
 

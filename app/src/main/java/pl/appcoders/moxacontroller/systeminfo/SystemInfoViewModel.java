@@ -63,7 +63,7 @@ public class SystemInfoViewModel extends ViewModel {
 
     void refresh() {
         if(isOnRestActionListenerRegistered()) {
-            onRestActionListener.requestStartedAction();
+            onRestActionListener.requestStartedAction("Refreshing...");
             Log.i("requested", "action");
         }
 

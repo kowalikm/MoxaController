@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
@@ -62,7 +64,7 @@ public class MappedInputViewModel extends ViewModel {
 
     void refreshRestData() {
         if(isOnRestActionListenerRegistered()) {
-            onRestActionListener.requestStartedAction();
+            onRestActionListener.requestStartedAction("Refreshing...");
             Log.i("requested", "action");
         }
         digitalInputService.getDigitalInputs().enqueue(new Callback<DigitalInputs>() {
@@ -82,6 +84,38 @@ public class MappedInputViewModel extends ViewModel {
             @Override
             public void onFailure(Call<DigitalInputs> call, Throwable t) {
                 Log.w("GetDigitalInputFailure", t.getMessage());
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.failureAction(t);
+                }
+            }
+        });
+    }
+
+    void resetDiCounter(Integer diIndex) {
+        if(isOnRestActionListenerRegistered()) {
+            onRestActionListener.requestStartedAction("Resetting counter...");
+            Log.i("requested", "action");
+        }
+
+        JsonObject counterResetJsonObject = CounterResetJsonObjectBuilder.buildCounterResetJsonObject(diIndex);
+
+        digitalInputService.resetDiCounter(diIndex.toString(), counterResetJsonObject).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()) {
+                    refreshRestData();
+                } else {
+                    Log.w("ResetDiCounterResponse", response.message());
+                }
+
+                if(isOnRestActionListenerRegistered()) {
+                    onRestActionListener.responseAction(response);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.w("ResetDiCounterFailure", t.getMessage());
                 if(isOnRestActionListenerRegistered()) {
                     onRestActionListener.failureAction(t);
                 }

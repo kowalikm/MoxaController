@@ -32,7 +32,6 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
         getActivity().setTitle("Mapped inputs");
         mappedInputViewModel = ViewModelProviders.of(this)
                 .get(MappedInputViewModel.class);
-
         registerRestActionListener();
     }
 
@@ -67,6 +66,7 @@ public class MappedInputFragment extends Fragment implements OnRefreshActionList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnListFragmentInteractionListener) {
             listener = (OnListFragmentInteractionListener) context;
         } else {
